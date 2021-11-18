@@ -64,12 +64,12 @@ function SignUp() {
               }
               required
             />
-            <SignButton margin="25px 0 10px 0 ">Login</SignButton>
+            <SignButton margin="25px 0 10px 0 ">Cadastrar</SignButton>
           </fieldset>
         </form>
 
         <TransparentButton onClick={() => history.push('/sign-in')}>
-          Ainda não sou grato
+          Já sou grato
         </TransparentButton>
       </SignContainer>
     </PageContainer>
