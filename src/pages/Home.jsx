@@ -1,8 +1,14 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import womanMeditating from '../assets/images/image05.webp';
+import Button from '../components/buttons/Button';
+import PageContainer from '../components/containers/PageContainer';
+import ContentContainer from '../components/containers/ContentContainer';
 
 function Home() {
+  const history = useHistory();
+
   return (
     <PageContainer>
       <ContentContainer>
@@ -13,7 +19,18 @@ function Home() {
             mais...
           </Description>
         </TextContainer>
-        <BottomContainer />
+        <BottomContainer>
+          <ImageContainer>
+            <Image src={womanMeditating} alt="woman-mediating-cartoon" />
+          </ImageContainer>
+
+          <StartButton onClick={() => history.push('/sign-up')}>
+            Quero Comecar
+          </StartButton>
+          <SignInButton onClick={() => history.push('/sign-in')}>
+            Ja sou grato
+          </SignInButton>
+        </BottomContainer>
       </ContentContainer>
     </PageContainer>
   );
@@ -21,20 +38,6 @@ function Home() {
 
 export default Home;
 
-const PageContainer = styled.div`
-  min-width: 100%;
-  min-height: 100%;
-  background-color: #6d7ce4;
-  color: #fff;
-`;
-
-const ContentContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,15 +58,30 @@ const Description = styled.p`
   text-align: center;
 `;
 
-// const Image = styled.img`
-//   width: 100%;
-// `;
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 70%;
+`;
+
+const Image = styled.img`
+  max-width: 100%;
+`;
 
 const BottomContainer = styled.div`
   flex-grow: 1;
   width: 100%;
-  background-image: url(${womanMeditating});
   background-color: #4d65a8;
-  background-size: contain;
-  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StartButton = styled(Button)`
+  bottom: 10%;
+  margin-bottom: 10px;
+`;
+
+const SignInButton = styled(Button)`
+  background-color: transparent;
+  font-size: 18px;
 `;
