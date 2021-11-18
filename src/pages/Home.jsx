@@ -5,6 +5,9 @@ import womanMeditating from '../assets/images/image05.webp';
 import Button from '../components/buttons/Button';
 import PageContainer from '../components/containers/PageContainer';
 import ContentContainer from '../components/containers/ContentContainer';
+import TextContainer from '../components/containers/TextContainer';
+import Title from '../components/others/Texts';
+import TransparentButton from '../components/buttons/TransparentButton';
 
 function Home() {
   const history = useHistory();
@@ -27,9 +30,9 @@ function Home() {
           <StartButton onClick={() => history.push('/sign-up')}>
             Quero Comecar
           </StartButton>
-          <SignInButton onClick={() => history.push('/sign-in')}>
+          <TransparentButton onClick={() => history.push('/sign-in')}>
             Ja sou grato
-          </SignInButton>
+          </TransparentButton>
         </BottomContainer>
       </ContentContainer>
     </PageContainer>
@@ -37,20 +40,6 @@ function Home() {
 }
 
 export default Home;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 50px 20px;
-  padding: 10px;
-`;
-
-const Title = styled.h1`
-  font-size: 1.6rem;
-  font-weight: 700;
-  text-align: center;
-`;
 
 const Description = styled.p`
   font-size: 1.3rem;
@@ -79,9 +68,4 @@ const BottomContainer = styled.div`
 const StartButton = styled(Button)`
   bottom: 10%;
   margin-bottom: 10px;
-`;
-
-const SignInButton = styled(Button)`
-  background-color: transparent;
-  font-size: 18px;
 `;
