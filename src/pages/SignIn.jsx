@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
 import Title from '../components/others/Texts';
@@ -10,6 +11,7 @@ import SignContainer from '../components/containers/SignContainer';
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
 
   return (
     <PageContainer>
@@ -20,23 +22,27 @@ function SignIn() {
           </Title>
         </TextContainer>
         <form>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <SignButton>Login</SignButton>
+          <fieldset>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <SignButton>Login</SignButton>
+          </fieldset>
         </form>
 
-        <TransparentButton>Ainda não sou grato</TransparentButton>
+        <TransparentButton onClick={() => history.push('/sign-up')}>
+          Ainda não sou grato
+        </TransparentButton>
       </SignContainer>
     </PageContainer>
   );
