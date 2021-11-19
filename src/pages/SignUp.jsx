@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
-import Title from '../components/others/Texts';
 import TransparentButton from '../components/buttons/TransparentButton';
 import SignButton from '../components/buttons/SignButton';
 import Input from '../components/others/Input';
 import SignContainer from '../components/containers/SignContainer';
+import { Title } from '../components/others/texts';
 
 function SignUp() {
   const [newUserData, setNewUserData] = useState({
@@ -68,7 +68,7 @@ function SignUp() {
           </fieldset>
         </form>
 
-        <TransparentButton onClick={() => history.push('/sign-in')}>
+        <TransparentButton onClick={() => history.push('/login')}>
           Já sou grato
         </TransparentButton>
       </SignContainer>

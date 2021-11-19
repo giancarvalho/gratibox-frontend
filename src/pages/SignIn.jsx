@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
-import Title from '../components/others/Texts';
+import { Title } from '../components/others/texts';
 import TransparentButton from '../components/buttons/TransparentButton';
 import SignButton from '../components/buttons/SignButton';
 import Input from '../components/others/Input';
@@ -40,7 +40,7 @@ function SignIn() {
           </fieldset>
         </form>
 
-        <TransparentButton onClick={() => history.push('/sign-up')}>
+        <TransparentButton onClick={() => history.push('/cadastro')}>
           Ainda não sou grato
         </TransparentButton>
       </SignContainer>

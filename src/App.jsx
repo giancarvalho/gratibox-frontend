@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import Plans from './pages/Plans';
 
 export default function App() {
   return (
@@ -13,11 +14,14 @@ export default function App() {
         <Route path="/" exact>
           <Home />
         </Route>
-        <Route path="/sign-in" exact>
+        <Route path="/login" exact>
           <SignIn />
         </Route>
-        <Route path="/sign-up" exact>
+        <Route path="/cadastro" exact>
           <SignUp />
+        </Route>
+        <Route path="/planos" exact>
+          <Plans />
         </Route>
       </Switch>
     </Router>

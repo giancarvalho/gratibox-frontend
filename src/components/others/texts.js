@@ -10,4 +10,10 @@ const Title = styled.h1`
   }
 `;
 
-export default Title;
+const Description = styled.p`
+  font-size: 1.3rem;
+  margin-top: 25px;
+  text-align: center;
+`;
+
+export { Title, Description };
