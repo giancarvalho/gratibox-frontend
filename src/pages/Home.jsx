@@ -6,7 +6,7 @@ import Button from '../components/buttons/Button';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
 import TransparentButton from '../components/buttons/TransparentButton';
-import { Description, Title } from '../components/others/texts';
+import { Subtext, Title } from '../components/others/texts';
 
 function Home() {
   const history = useHistory();
@@ -16,10 +16,10 @@ function Home() {
       <HomeContainer>
         <TextContainer>
           <Title>Bem vindo ao GratiBox</Title>
-          <Description>
+          <Subtext center>
             Receba em casa um box com chás, produtos orgânicos, incensos e muito
             mais...
-          </Description>
+          </Subtext>
         </TextContainer>
         <BottomContainer>
           <ImageContainer>

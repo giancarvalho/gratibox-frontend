@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PageContainer from '../../components/containers/PageContainer';
-import { Description, Title } from '../../components/others/texts';
+import { Subtext, Title } from '../../components/others/texts';
 import TextContainer from '../../components/containers/TextContainer';
 import ContentContainer from '../../components/containers/ContentContainer';
 
@@ -11,9 +11,9 @@ function Plans() {
       <ContentContainer>
         <TextContainer>
           <Title>Bom te ver por aqui, @User</Title>
-          <Description>
+          <Subtext>
             Você ainda não assinou um plano, que tal começar agora?
-          </Description>
+          </Subtext>
         </TextContainer>
         <PlansContainer>Plans go here</PlansContainer>
       </ContentContainer>
