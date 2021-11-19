@@ -6,10 +6,12 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Plans from './pages/plans/Plans';
+import ScrollToTop from './hooks/ScrollToTop';
 
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Switch>
         <Route path="/" exact>
           <Home />
