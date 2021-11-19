@@ -35,6 +35,7 @@ const Image = styled.img`
 `;
 
 const Description = styled.p`
+  min-height: 75px;
   margin: 5px 0 25px;
   line-height: 25px;
 `;

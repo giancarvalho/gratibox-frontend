@@ -4,6 +4,7 @@ import PageContainer from '../../components/containers/PageContainer';
 import { Subtext, Title } from '../../components/others/texts';
 import TextContainer from '../../components/containers/TextContainer';
 import ContentContainer from '../../components/containers/ContentContainer';
+import Plan from './Plan';
 
 function Plans() {
   return (
@@ -15,7 +16,16 @@ function Plans() {
             Você ainda não assinou um plano, que tal começar agora?
           </Subtext>
         </TextContainer>
-        <PlansContainer>Plans go here</PlansContainer>
+        <PlansContainer>
+          <Plan
+            img="https://i.imgur.com/NQ13yjA.jpg"
+            description="Você recebe um box por semana. Ideal para quem quer exercer a gratidão todos os dias."
+          />
+          <Plan
+            img="https://i.imgur.com/NQ13yjA.jpg"
+            description="Você recebe um box por mês. Ideal para quem está começando agora."
+          />
+        </PlansContainer>
       </ContentContainer>
     </PageContainer>
   );
