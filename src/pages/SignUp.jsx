@@ -38,6 +38,7 @@ function SignUp({ sendAlert }) {
           message:
             'Não foi possível criar sua conta. Tente novamente mais tarde.',
           error: true,
+          position: '5%',
         });
       });
   }
@@ -89,7 +90,7 @@ function SignUp({ sendAlert }) {
           </fieldset>
         </form>
 
-        <TransparentButton onClick={() => history.push('/sign-in')}>
+        <TransparentButton onClick={() => history.push('/login')}>
           Já sou grato
         </TransparentButton>
       </SignContainer>

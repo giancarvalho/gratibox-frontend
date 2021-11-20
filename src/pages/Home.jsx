@@ -27,10 +27,10 @@ function Home() {
             <Image src={womanMeditating} alt="woman-mediating-cartoon" />
           </ImageContainer>
 
-          <StartButton onClick={() => history.push('/sign-up')}>
+          <StartButton onClick={() => history.push('/cadastro')}>
             Quero Comecar
           </StartButton>
-          <TransparentButton onClick={() => history.push('/sign-in')}>
+          <TransparentButton onClick={() => history.push('/login')}>
             Ja sou grato
           </TransparentButton>
         </BottomContainer>

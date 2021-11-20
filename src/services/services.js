@@ -12,7 +12,8 @@ function postNewUser(newUserData) {
   return axiosBase.post('/sign-up', newUserData);
 }
 
-export {
-  // eslint-disable-next-line import/prefer-default-export
-  postNewUser,
-};
+function postUser(userData) {
+  return axiosBase.post('/sign-in', userData);
+}
+
+export { postNewUser, postUser };
