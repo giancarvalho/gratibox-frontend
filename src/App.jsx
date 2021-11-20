@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Plans from './pages/plans/Plans';
 import ScrollToTop from './hooks/ScrollToTop';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   const [user, setUser] = useState({});
@@ -39,9 +40,7 @@ function App() {
             <SignUp sendAlert={sendAlert} />
           </Route>
 
-          <Route path="/planos" exact>
-            <Plans />
-          </Route>
+          <PrivateRoute path="/planos" element={Plans} exact />
         </Switch>
       </UserContext.Provider>
       <Alert alert={alert} setAlert={setAlert} />
