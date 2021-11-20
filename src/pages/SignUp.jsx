@@ -7,15 +7,41 @@ import SignButton from '../components/buttons/SignButton';
 import Input from '../components/others/Input';
 import SignContainer from '../components/containers/SignContainer';
 import { Title } from '../components/others/texts';
+import areInputsValid from '../validations/signUp';
+import { postNewUser } from '../services/services';
 
-function SignUp() {
+function SignUp({ sendAlert }) {
   const [newUserData, setNewUserData] = useState({
     name: '',
     password: '',
-    confirmPassword: '',
     email: '',
   });
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [disabled, setDisabled] = useState(false);
   const history = useHistory();
+
+  function signUp(e) {
+    e.preventDefault();
+    setDisabled(true);
+
+    if (areInputsValid({ newUserData, confirmPassword, sendAlert })) {
+      setDisabled(false);
+
+      return;
+    }
+
+    postNewUser(newUserData)
+      .then(() => history.push('/login?registered=true'))
+      .catch(() => {
+        setDisabled(false);
+        sendAlert({
+          message:
+            'Não foi possível criar sua conta. Tente novamente mais tarde.',
+          error: true,
+          position: '5%',
+        });
+      });
+  }
 
   return (
     <PageContainer>
@@ -25,8 +51,8 @@ function SignUp() {
             <span className="semibold">Bem vindo ao</span> GratiBox
           </Title>
         </TextContainer>
-        <form>
-          <fieldset>
+        <form onSubmit={signUp}>
+          <fieldset disabled={disabled}>
             <Input
               placeholder="Nome"
               value={newUserData.name}
@@ -54,14 +80,10 @@ function SignUp() {
               required
             />
             <Input
+              type="password"
               placeholder="Confirmar senha"
-              value={newUserData.confirmPassword}
-              onChange={(e) =>
-                setNewUserData({
-                  ...newUserData,
-                  confirmPassword: e.target.value,
-                })
-              }
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
             <SignButton margin="25px 0 10px 0 ">Cadastrar</SignButton>

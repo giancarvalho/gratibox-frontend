@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../../components/buttons/Button';
 
-function Plan({ img, description }) {
+function Plan({ planData }) {
+  const { img, description, name } = planData;
+
   return (
     <PlanContainer>
-      <Image src={img} alt="plan1" />
+      <Image src={img} alt={name} />
       <Description>{description}</Description>
       <Button>Assinar</Button>
     </PlanContainer>
