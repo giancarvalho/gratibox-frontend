@@ -1,15 +1,17 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/buttons/Button';
 
 function Plan({ planData }) {
-  const { img, description, name } = planData;
+  const { img, description, name, id } = planData;
+  const history = useHistory();
 
   return (
     <PlanContainer>
       <Image src={img} alt={name} />
       <Description>{description}</Description>
-      <Button>Assinar</Button>
+      <Button onClick={() => history.push(`/plano/${id}`)}>Assinar</Button>
     </PlanContainer>
   );
 }
