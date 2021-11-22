@@ -10,7 +10,7 @@ import SignUp from './pages/SignUp';
 import Plans from './pages/plans/Plans';
 import ScrollToTop from './hooks/ScrollToTop';
 import PrivateRoute from './routes/PrivateRoute';
-import PlanView from './pages/planview/PlanView';
+import PlanForm from './pages/planform/PlanForm';
 
 function App() {
   const [user, setUser] = useState({});
@@ -44,7 +44,7 @@ function App() {
           <PrivateRoute path="/planos" element={Plans} exact />
           <PrivateRoute
             path="/plano/:id"
-            element={PlanView}
+            element={PlanForm}
             sendAlert={sendAlert}
             exact
           />

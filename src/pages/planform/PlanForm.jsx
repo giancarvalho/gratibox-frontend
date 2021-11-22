@@ -52,7 +52,7 @@ function State({ statesList, setAddressData, addressData }) {
   );
 }
 
-function PlanView({ sendAlert }) {
+function PlanForm({ sendAlert }) {
   const [formDetails, setFormDetails] = useState({
     states: [],
     options: [],
@@ -246,7 +246,7 @@ function PlanView({ sendAlert }) {
   );
 }
 
-export default PlanView;
+export default PlanForm;
 
 const PlanContainer = styled.div`
   width: 95%;
