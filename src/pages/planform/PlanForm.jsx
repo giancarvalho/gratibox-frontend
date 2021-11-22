@@ -15,7 +15,7 @@ import img from '../../assets/images/image03.jpg';
 import DropDown from './DropDown';
 import Button from '../../components/buttons/Button';
 import Input from '../../components/others/Input';
-import { getFormDetails, postPlan } from '../../services/services';
+import { getFormDetails, postSubscription } from '../../services/services';
 import addressSchema from '../../validations/addressData';
 import zipcodeSchema from '../../validations/cepSchema';
 
@@ -114,7 +114,9 @@ function PlanForm({ sendAlert }) {
       options: chosenItems.options,
     };
 
-    postPlan(body, user.token).catch((error) => console.log(error.response));
+    postSubscription(body, user.token).catch((error) =>
+      console.log(error.response)
+    );
   }
 
   function formatZipcode(e) {

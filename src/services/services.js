@@ -20,11 +20,11 @@ function getPlans(token) {
   return axiosBase.get('/plans', createBearerAuth(token));
 }
 
-function postPlan(body, token) {
-  return axiosBase.post('/plans', body, createBearerAuth(token));
+function postSubscription(body, token) {
+  return axiosBase.post('/subscription', body, createBearerAuth(token));
 }
 
 function getFormDetails(token) {
   return axiosBase.get('/form-details', createBearerAuth(token));
 }
-export { postNewUser, postUser, getPlans, getFormDetails, postPlan };
+export { postNewUser, postUser, getPlans, getFormDetails, postSubscription };
