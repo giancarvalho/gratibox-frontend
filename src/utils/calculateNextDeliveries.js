@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 function recalcIfWeekend(date) {
   const day = dayjs(date).get('d');
 
-  if (day === 6 || day === 0) return date;
+  if (day !== 6 && day !== 0) return date;
 
   const sumValue = day === 0 ? '1' : '2';
 
@@ -12,8 +12,9 @@ function recalcIfWeekend(date) {
 
 function calculateNextDeliveries(plan) {
   const deliveries = [];
-  let referenceDate = plan.timestamp;
+  const dayUnit = plan.name === 'mensal' ? 'D' : 'd';
   const timeUnit = plan.name === 'mensal' ? 'month' : 'week';
+  let referenceDate = dayjs().set(dayUnit, plan.day);
 
   for (let i = 0; i < 3; i += 1) {
     let delivery = dayjs(referenceDate).add(1, timeUnit);

@@ -32,9 +32,17 @@ function SignUp({ sendAlert }) {
 
     postNewUser(newUserData)
       .then(() => history.push('/login?registered=true'))
-      .catch(() => {
+      .catch((error) => {
         setDisabled(false);
-        sendAlert({
+
+        if (error.response.status === 409) {
+          return sendAlert({
+            message: 'Usuário já registrado',
+            error: true,
+          });
+        }
+
+        return sendAlert({
           message:
             'Não foi possível criar sua conta. Tente novamente mais tarde.',
           error: true,
