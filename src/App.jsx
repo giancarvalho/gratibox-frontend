@@ -42,7 +42,12 @@ function App() {
           </Route>
 
           <PrivateRoute path="/planos" element={Plans} exact />
-          <PrivateRoute path="/plano/:id" element={PlanView} exact />
+          <PrivateRoute
+            path="/plano/:id"
+            element={PlanView}
+            sendAlert={sendAlert}
+            exact
+          />
         </Switch>
       </UserContext.Provider>
       <Alert alert={alert} setAlert={setAlert} />

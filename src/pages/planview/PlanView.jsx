@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-unescaped-entities */
@@ -15,6 +16,8 @@ import DropDown from './DropDown';
 import Button from '../../components/buttons/Button';
 import Input from '../../components/others/Input';
 import { getFormDetails, postPlan } from '../../services/services';
+import addressSchema from '../../validations/addressData';
+import zipcodeSchema from '../../validations/cepSchema';
 
 function State({ statesList, setAddressData, addressData }) {
   const [isClicked, setIsClicked] = useState(false);
@@ -49,7 +52,7 @@ function State({ statesList, setAddressData, addressData }) {
   );
 }
 
-function PlanView() {
+function PlanView({ sendAlert }) {
   const [formDetails, setFormDetails] = useState({
     states: [],
     options: [],
@@ -95,15 +98,60 @@ function PlanView() {
   }, []);
 
   function subscribeToPlan() {
+    const addressValidation = addressSchema.validate(addressData);
+
+    if (addressValidation.error) {
+      sendAlert({
+        message: addressValidation.error?.details[0].message,
+        error: true,
+      });
+      return;
+    }
+
     const body = {
-      userId: 1,
       planDetails: { planId: Number(id), day: chosenItems.day },
       addressData,
       options: chosenItems.options,
     };
 
-    console.log(body);
     postPlan(body, user.token).catch((error) => console.log(error.response));
+  }
+
+  function formatZipcode(e) {
+    let newValue = e.target.value;
+
+    if (newValue.length < addressData.zipcode.length) {
+      setAddressData({ ...addressData, zipcode: newValue });
+    }
+
+    const validation = zipcodeSchema.validate(newValue);
+
+    if (validation.error) return;
+    if (newValue.length === 9) return;
+    if (newValue.length === 8 && newValue.length > addressData.zipcode.length) {
+      newValue = newValue.slice(0, 5) + '-' + newValue.slice(5);
+    }
+
+    setAddressData({ ...addressData, zipcode: newValue });
+  }
+
+  function goToNext() {
+    if (!chosenItems.day) {
+      sendAlert({
+        message: 'Por favor, escolha o dia da entrega',
+        error: true,
+      });
+      return;
+    }
+
+    if (!chosenItems.options.length) {
+      sendAlert({
+        message: 'Por favor, escolha pelo menos um item para receber',
+        error: true,
+      });
+      return;
+    }
+    setShowDelivery(true);
   }
 
   return (
@@ -141,9 +189,7 @@ function PlanView() {
                 <AddressInput
                   placeholder="CEP"
                   value={addressData.zipcode}
-                  onChange={(e) =>
-                    setAddressData({ ...addressData, zipcode: e.target.value })
-                  }
+                  onChange={(e) => formatZipcode(e)}
                   required
                 />
                 <AuxContainer>
@@ -193,9 +239,7 @@ function PlanView() {
             Finalizar
           </StyledButton>
         ) : (
-          <StyledButton onClick={() => setShowDelivery(true)}>
-            Próximo
-          </StyledButton>
+          <StyledButton onClick={() => goToNext()}>Próximo</StyledButton>
         )}
       </ContentContainer>
     </PageContainer>
