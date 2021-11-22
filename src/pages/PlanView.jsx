@@ -35,7 +35,6 @@ function PlanView({ sendAlert }) {
     });
   }, []);
 
-  console.log(subscriptionData.options);
   return (
     <PageContainer>
       <ContentContainer>
