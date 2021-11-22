@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineArrowDown } from 'react-icons/ai';
@@ -14,14 +14,16 @@ import img from '../../assets/images/image03.jpg';
 import DropDown from './DropDown';
 import Button from '../../components/buttons/Button';
 import Input from '../../components/others/Input';
+import { getFormDetails } from '../../services/services';
 
-function State() {
+function State({ statesList, setAddressData, addressData }) {
   const [isClicked, setIsClicked] = useState(false);
   const [chosenOption, setChosenOption] = useState(null);
 
-  function chooseState(e, state) {
+  function chooseState(e, state, id) {
     e.stopPropagation();
 
+    setAddressData({ ...addressData, stateId: id });
     setChosenOption(state);
     setIsClicked(false);
   }
@@ -33,13 +35,14 @@ function State() {
       </div>
       {isClicked && (
         <StateOptionsContainer>
-          <li onClick={(e) => chooseState(e, 'MG')}>MG</li>
-          <li onClick={(e) => chooseState(e, 'ES')}>ES</li>
-          <li>MG</li>
-          <li>MG</li>
-          <li>MG</li>
-          <li>MG</li>
-          <li>MG</li>
+          {statesList.map((state) => (
+            <li
+              onClick={(e) => chooseState(e, state.name, state.id)}
+              key={state.id}
+            >
+              {state.name}
+            </li>
+          ))}
         </StateOptionsContainer>
       )}
     </StateContainer>
@@ -47,11 +50,42 @@ function State() {
 }
 
 function PlanView() {
+  const [formDetails, setFormDetails] = useState({
+    states: [],
+    options: [],
+    plans: [],
+  });
+  const [addressData, setAddressData] = useState({
+    recipient: '',
+    address: '',
+    zipcode: '',
+    city: '',
+    stateId: '',
+  });
+  const [chosenItems, setchosenItems] = useState({
+    day: null,
+    options: [],
+  });
   const { user } = useContext(UserContext);
   const { id } = useParams();
   const [showDelivery, setShowDelivery] = useState(false);
+  const [plan, setPlan] = useState([]);
+  const days =
+    id === '1'
+      ? [{ name: '01' }, { name: '10' }, { name: '20' }]
+      : [{ name: 'Seg' }, { name: 'Ter' }, { name: 'Qua' }];
 
-  console.log(id);
+  useEffect(() => {
+    getFormDetails(user.token)
+      .then((response) => {
+        setPlan(
+          response.data.plans.filter((planData) => planData.id === Number(id))
+        );
+        setFormDetails(response.data);
+      })
+      .catch((error) => console.log(error.response?.data));
+  }, []);
+
   return (
     <PageContainer>
       <ContentContainer>
@@ -64,38 +98,76 @@ function PlanView() {
           <Image src={img} alt="plan-img" />
           {showDelivery ? (
             <>
-              <AddressInput placeholder="Nome Completo" />
-              <AddressInput placeholder="Endereço de Entrega" />
-              <AddressInput placeholder="CEP" />
+              <AddressInput
+                placeholder="Nome Completo"
+                value={addressData.recipient}
+                onChange={(e) =>
+                  setAddressData({ ...addressData, recipient: e.target.value })
+                }
+              />
+              <AddressInput
+                placeholder="Endereço de Entrega"
+                value={addressData.address}
+                onChange={(e) =>
+                  setAddressData({ ...addressData, address: e.target.value })
+                }
+              />
+              <AddressInput
+                placeholder="CEP"
+                value={addressData.zipcode}
+                onChange={(e) =>
+                  setAddressData({ ...addressData, zipcode: e.target.value })
+                }
+              />
               <AuxContainer>
-                <AddressInput className="city" placeholder="Cidade" />
-                <State />
+                <AddressInput
+                  className="city"
+                  placeholder="Cidade"
+                  value={addressData.city}
+                  onChange={(e) =>
+                    setAddressData({
+                      ...addressData,
+                      city: e.target.value,
+                    })
+                  }
+                />
+                <State
+                  statesList={formDetails.states}
+                  setAddressData={setAddressData}
+                  addressData={addressData}
+                />
               </AuxContainer>
             </>
           ) : (
             <>
-              <DropDown name="Plano" items={[{ name: 'Mensal' }]} />
+              <DropDown name="Plano" items={plan} />
               <DropDown
                 name="Entrega"
-                items={[{ name: 1 }, { name: 2 }, { name: 3 }]}
-                isCheckable
+                items={days}
+                isCheckable={{ exclusiveOption: true }}
+                setchosenItems={setchosenItems}
+                chosenItems={chosenItems}
               />
               <DropDown
                 name="Quero receber"
-                isCheckable
-                items={[
-                  { name: 'Coisa' },
-                  { name: 'Coisinha 2' },
-                  { name: 'Coisinha 3' },
-                ]}
+                isCheckable={{ exclusiveOption: false }}
+                items={formDetails.options}
+                setchosenItems={setchosenItems}
+                chosenItems={chosenItems}
               />
             </>
           )}
         </PlanContainer>
 
-        <StyledButton onClick={() => setShowDelivery(true)}>
-          Próximo
-        </StyledButton>
+        {showDelivery ? (
+          <StyledButton onClick={() => setShowDelivery(true)}>
+            Finalizar
+          </StyledButton>
+        ) : (
+          <StyledButton onClick={() => setShowDelivery(true)}>
+            Próximo
+          </StyledButton>
+        )}
       </ContentContainer>
     </PageContainer>
   );

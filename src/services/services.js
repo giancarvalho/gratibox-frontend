@@ -19,4 +19,8 @@ function postUser(userData) {
 function getPlans(token) {
   return axiosBase.get('/plans', createBearerAuth(token));
 }
-export { postNewUser, postUser, getPlans };
+
+function getFormDetails(token) {
+  return axiosBase.get('/form-details', createBearerAuth(token));
+}
+export { postNewUser, postUser, getPlans, getFormDetails };

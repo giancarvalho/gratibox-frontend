@@ -1,21 +1,50 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineArrowDown, AiOutlineCheck } from 'react-icons/ai';
 
-function CheckableItem({ itemName }) {
+function CheckableItem({ item, chosenItems, setchosenItems, isCheckable }) {
   const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    if (isCheckable.exclusiveOption) {
+      if (chosenItems.day !== item.name) {
+        setIsChecked(false);
+      }
+    }
+  }, [chosenItems.day]);
+
+  function addOrDeleteOption() {
+    if (isChecked) {
+      const newOptionList = chosenItems.options.filter(
+        (option) => option !== item.id
+      );
+      setchosenItems({ ...chosenItems, options: newOptionList });
+    } else {
+      setchosenItems({
+        ...chosenItems,
+        options: [...chosenItems.options, item.id],
+      });
+    }
+  }
 
   function check(e) {
     e.stopPropagation();
 
+    if (isCheckable.exclusiveOption) {
+      setchosenItems({ ...chosenItems, day: item.name });
+    } else {
+      addOrDeleteOption();
+    }
+
     setIsChecked(!isChecked);
   }
+
   return (
     <li onClick={(e) => check(e)}>
       <CheckContainer>{isChecked && <AiOutlineCheck />}</CheckContainer>
-      {itemName}
+      {item.name}
     </li>
   );
 }
@@ -24,7 +53,7 @@ function Item({ itemName }) {
   return <li>{itemName}</li>;
 }
 
-function DropDown({ name, isCheckable, items }) {
+function DropDown({ name, isCheckable, items, chosenItems, setchosenItems }) {
   const [isListOpen, setIsListOpen] = useState(false);
 
   return (
@@ -37,7 +66,12 @@ function DropDown({ name, isCheckable, items }) {
         <ListContainer>
           {items.map((item) =>
             isCheckable ? (
-              <CheckableItem itemName={item.name} />
+              <CheckableItem
+                item={item}
+                chosenItems={chosenItems}
+                setchosenItems={setchosenItems}
+                isCheckable={isCheckable}
+              />
             ) : (
               <Item itemName={item.name} />
             )
