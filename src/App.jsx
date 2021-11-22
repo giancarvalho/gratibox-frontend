@@ -11,6 +11,7 @@ import Plans from './pages/plans/Plans';
 import ScrollToTop from './hooks/ScrollToTop';
 import PrivateRoute from './routes/PrivateRoute';
 import PlanForm from './pages/planform/PlanForm';
+import PlanView from './pages/PlanView';
 
 function App() {
   const [user, setUser] = useState({});
@@ -48,6 +49,9 @@ function App() {
             sendAlert={sendAlert}
             exact
           />
+          <Route path="/exibir-plano" exact>
+            <PlanView />
+          </Route>
         </Switch>
       </UserContext.Provider>
       <Alert alert={alert} setAlert={setAlert} />
