@@ -26,7 +26,7 @@ function areInputsValid({ sendAlert, newUserData, confirmPassword }) {
   }
 
   if (newUserData.password !== confirmPassword) {
-    sendAlert({ message: "Your passwords don't match", error: true });
+    sendAlert({ message: 'Suas senhas não são iguais', error: true });
     return true;
   }
 

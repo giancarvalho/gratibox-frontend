@@ -10,4 +10,10 @@ const Title = styled.h1`
   }
 `;
 
-export default Title;
+const Subtext = styled.p`
+  font-size: 1.3rem;
+  margin-top: 25px;
+  text-align: ${({ center }) => (center ? 'center' : 'start')};
+`;
+
+export { Title, Subtext };

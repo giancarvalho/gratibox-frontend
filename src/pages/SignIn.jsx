@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import useQuery from '../hooks/useQuery';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
-import Title from '../components/others/Texts';
+import { Title } from '../components/others/texts';
 import TransparentButton from '../components/buttons/TransparentButton';
 import SignButton from '../components/buttons/SignButton';
 import Input from '../components/others/Input';
@@ -46,14 +46,21 @@ function SignIn({ sendAlert }) {
         history.push('/planos');
       })
       .catch((error) => {
-        sendAlert({
+        setDisabled(false);
+        if (error.response.status === 404) {
+          return sendAlert({ message: 'Usuário não registrado.', error: true });
+        }
+
+        if (error.response.status === 401) {
+          return sendAlert({ message: 'Senha não confere.', error: true });
+        }
+
+        return sendAlert({
           message: error.response
             ? error.response?.data
             : 'Nosso server está fora do ar.',
           error: true,
         });
-
-        setDisabled(false);
       });
   }
 

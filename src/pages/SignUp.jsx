@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
-import Title from '../components/others/Texts';
 import TransparentButton from '../components/buttons/TransparentButton';
 import SignButton from '../components/buttons/SignButton';
 import Input from '../components/others/Input';
 import SignContainer from '../components/containers/SignContainer';
+import { Title } from '../components/others/texts';
 import areInputsValid from '../validations/signUp';
 import { postNewUser } from '../services/services';
 
@@ -32,9 +32,17 @@ function SignUp({ sendAlert }) {
 
     postNewUser(newUserData)
       .then(() => history.push('/login?registered=true'))
-      .catch(() => {
+      .catch((error) => {
         setDisabled(false);
-        sendAlert({
+
+        if (error.response.status === 409) {
+          return sendAlert({
+            message: 'Usuário já registrado',
+            error: true,
+          });
+        }
+
+        return sendAlert({
           message:
             'Não foi possível criar sua conta. Tente novamente mais tarde.',
           error: true,

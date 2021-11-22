@@ -7,6 +7,11 @@ import Alert from './components/others/Alert';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import Plans from './pages/plans/Plans';
+import ScrollToTop from './hooks/ScrollToTop';
+import PrivateRoute from './routes/PrivateRoute';
+import PlanForm from './pages/planform/PlanForm';
+import PlanView from './pages/PlanView';
 
 function App() {
   const [user, setUser] = useState({});
@@ -22,6 +27,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <UserContext.Provider value={{ setUser, user }}>
         <Switch>
           <Route path="/" exact>
@@ -35,6 +41,20 @@ function App() {
           <Route path="/cadastro" exact>
             <SignUp sendAlert={sendAlert} />
           </Route>
+
+          <PrivateRoute path="/planos" element={Plans} exact />
+          <PrivateRoute
+            path="/plano/:id"
+            element={PlanForm}
+            sendAlert={sendAlert}
+            exact
+          />
+          <PrivateRoute
+            path="/exibir-plano"
+            element={PlanView}
+            sendAlert={sendAlert}
+            exact
+          />
         </Switch>
       </UserContext.Provider>
       <Alert alert={alert} setAlert={setAlert} />
