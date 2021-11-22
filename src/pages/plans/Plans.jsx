@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import PageContainer from '../../components/containers/PageContainer';
 import { Subtext, Title } from '../../components/others/texts';
 import TextContainer from '../../components/containers/TextContainer';
@@ -11,14 +12,17 @@ import { getPlans } from '../../services/services';
 function Plans() {
   const { user } = useContext(UserContext);
   const [plansList, setPlansList] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
-    getPlans(user.token)
-      .then((response) => setPlansList(response.data))
-      .catch((response) => console.log(response));
+    if (user.isSubscribed) {
+      history.push('/exibir-plano');
+    } else {
+      getPlans(user.token)
+        .then((response) => setPlansList(response.data))
+        .catch((error) => console.log(error));
+    }
   }, []);
-
-  console.log(user.token);
 
   return (
     <PageContainer>

@@ -44,7 +44,7 @@ function CheckableItem({ item, chosenItems, setchosenItems, isCheckable }) {
   return (
     <li onClick={(e) => check(e)}>
       <CheckContainer>{isChecked && <AiOutlineCheck />}</CheckContainer>
-      {item.name}
+      {item.name || item.dayName}
     </li>
   );
 }

@@ -10,9 +10,12 @@ import UserContext from '../contexts/UserContext';
 import img from '../assets/images/image03.jpg';
 import { getSubscription } from '../services/services';
 import calculateNextDeliveries from '../utils/calculateNextDeliveries';
+import useQuery from '../hooks/useQuery';
 
-function PlanView() {
+function PlanView({ sendAlert }) {
   const { user } = useContext(UserContext);
+  const justSubscribed = useQuery().get('justSubscribed');
+
   const [subscriptionData, setSubscriptionData] = useState({
     name: '',
     timestamp: '',
@@ -22,12 +25,17 @@ function PlanView() {
   const [nextDeliveries, setNextDeliviries] = useState([]);
 
   useEffect(() => {
-    getSubscription('f09907b9-2810-4e78-9984-239bf96be829').then((response) => {
+    if (justSubscribed) {
+      sendAlert({ message: 'Sucesso! Seu plano já está ativo.' });
+    }
+
+    getSubscription(user.token).then((response) => {
       setSubscriptionData(response.data);
       setNextDeliviries(calculateNextDeliveries(response.data));
     });
   }, []);
 
+  console.log(subscriptionData.options);
   return (
     <PageContainer>
       <ContentContainer>
@@ -61,7 +69,7 @@ function PlanView() {
             </DeliveryInfo>
             <OptionsList>
               {subscriptionData.options.map((option) => (
-                <li>{option.name}</li>
+                <li key={option.name}>{option.name}</li>
               ))}
             </OptionsList>
           </PlanDetails>

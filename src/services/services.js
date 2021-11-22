@@ -28,8 +28,11 @@ function getSubscription(token) {
   return axiosBase.get('/subscription', createBearerAuth(token));
 }
 
-function getFormDetails(token) {
-  return axiosBase.get('/form-details', createBearerAuth(token));
+function getFormDetails(planId, token) {
+  return axiosBase.get(
+    `/form-details?planId=${planId}`,
+    createBearerAuth(token)
+  );
 }
 export {
   postNewUser,

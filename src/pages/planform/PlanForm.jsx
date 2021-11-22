@@ -3,9 +3,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { AiOutlineArrowDown } from 'react-icons/ai';
 import UserContext from '../../contexts/UserContext';
 import PageContainer from '../../components/containers/PageContainer';
 import TextContainer from '../../components/containers/TextContainer';
@@ -18,45 +17,19 @@ import Input from '../../components/others/Input';
 import { getFormDetails, postSubscription } from '../../services/services';
 import addressSchema from '../../validations/addressData';
 import zipcodeSchema from '../../validations/cepSchema';
-
-function State({ statesList, setAddressData, addressData }) {
-  const [isClicked, setIsClicked] = useState(false);
-  const [chosenOption, setChosenOption] = useState(null);
-
-  function chooseState(e, state, id) {
-    e.stopPropagation();
-
-    setAddressData({ ...addressData, stateId: id });
-    setChosenOption(state);
-    setIsClicked(false);
-  }
-
-  return (
-    <StateContainer onClick={() => setIsClicked(!isClicked)}>
-      <div>
-        {chosenOption || 'Estado'} <ArrowDown />
-      </div>
-      {isClicked && (
-        <StateOptionsContainer>
-          {statesList.map((state) => (
-            <li
-              onClick={(e) => chooseState(e, state.name, state.id)}
-              key={state.id}
-            >
-              {state.name}
-            </li>
-          ))}
-        </StateOptionsContainer>
-      )}
-    </StateContainer>
-  );
-}
+import { storeUser } from '../../utils/storedUser';
+import StatesDropDown from './StatesDropDown';
 
 function PlanForm({ sendAlert }) {
+  const { user } = useContext(UserContext);
+  const history = useHistory();
+  const { id } = useParams();
+  const [showDelivery, setShowDelivery] = useState(false);
+  const [plan, setPlan] = useState(null);
   const [formDetails, setFormDetails] = useState({
     states: [],
     options: [],
-    plans: [],
+    days: [],
   });
   const [addressData, setAddressData] = useState({
     recipient: '',
@@ -69,30 +42,13 @@ function PlanForm({ sendAlert }) {
     day: null,
     options: [],
   });
-  const { user } = useContext(UserContext);
-  const { id } = useParams();
-  const [showDelivery, setShowDelivery] = useState(false);
-  const [plan, setPlan] = useState([]);
-  const days =
-    id === '1'
-      ? [
-          { name: '01', value: 1 },
-          { name: '10', value: 10 },
-          { name: '20', value: 20 },
-        ]
-      : [
-          { name: 'Seg', value: 0 },
-          { name: 'Qua', value: 3 },
-          { name: 'Sex', value: 4 },
-        ];
 
   useEffect(() => {
-    getFormDetails(user.token)
+    getFormDetails(id, user.token)
       .then((response) => {
-        setPlan(
-          response.data.plans.filter((planData) => planData.id === Number(id))
-        );
-        setFormDetails(response.data);
+        const formData = response.data;
+        setPlan(formData.plan.planInfo);
+        setFormDetails({ ...formData, days: formData.plan.days });
       })
       .catch((error) => console.log(error.response?.data));
   }, []);
@@ -114,9 +70,12 @@ function PlanForm({ sendAlert }) {
       options: chosenItems.options,
     };
 
-    postSubscription(body, user.token).catch((error) =>
-      console.log(error.response)
-    );
+    postSubscription(body, user.token)
+      .then(() => {
+        history.push('/exibir-plano?justSubscribed=true');
+        storeUser({ name: user.name, token: user.token, isSubscribed: true });
+      })
+      .catch((error) => console.log(error.response));
   }
 
   function formatZipcode(e) {
@@ -207,7 +166,7 @@ function PlanForm({ sendAlert }) {
                     }
                     required
                   />
-                  <State
+                  <StatesDropDown
                     statesList={formDetails.states}
                     setAddressData={setAddressData}
                     addressData={addressData}
@@ -217,10 +176,10 @@ function PlanForm({ sendAlert }) {
             </form>
           ) : (
             <>
-              <DropDown name="Plano" items={plan} />
+              <DropDown name="Plano" items={plan ? [plan] : []} />
               <DropDown
                 name="Entrega"
-                items={days}
+                items={formDetails.days}
                 isCheckable={{ exclusiveOption: true }}
                 setchosenItems={setchosenItems}
                 chosenItems={chosenItems}
@@ -295,51 +254,5 @@ const AuxContainer = styled.div`
 
   input {
     width: 60%;
-  }
-`;
-
-const StateContainer = styled.div`
-  font-size: 18px;
-  width: 40%;
-  height: 44px;
-  background-color: rgba(224, 209, 237, 0.62);
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 10px;
-  position: relative;
-
-  div {
-    padding: 10px 10px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-`;
-
-const ArrowDown = styled(AiOutlineArrowDown)`
-  font-size: 26px;
-`;
-
-const StateOptionsContainer = styled.ul`
-  width: 100%;
-  height: 70px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 18px;
-  position: absolute;
-  font-weight: 400;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border-radius: 0 0 4px 4px;
-  padding: 5px;
-  overflow-y: scroll;
-
-  li {
-    margin-bottom: 7px;
   }
 `;

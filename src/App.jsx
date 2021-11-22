@@ -49,9 +49,12 @@ function App() {
             sendAlert={sendAlert}
             exact
           />
-          <Route path="/exibir-plano" exact>
-            <PlanView />
-          </Route>
+          <PrivateRoute
+            path="/exibir-plano"
+            element={PlanView}
+            sendAlert={sendAlert}
+            exact
+          />
         </Switch>
       </UserContext.Provider>
       <Alert alert={alert} setAlert={setAlert} />
