@@ -27,7 +27,7 @@ function Home() {
           </ImageContainer>
 
           <StartButton onClick={() => history.push('/cadastro')}>
-            Quero Comecar
+            Quero Começar
           </StartButton>
           <TransparentButton onClick={() => history.push('/login')}>
             Ja sou grato
