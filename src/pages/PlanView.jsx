@@ -1,15 +1,33 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 import PageContainer from '../components/containers/PageContainer';
 import TextContainer from '../components/containers/TextContainer';
 import { Subtext, Title } from '../components/others/texts';
 import ContentContainer from '../components/containers/ContentContainer';
 import UserContext from '../contexts/UserContext';
 import img from '../assets/images/image03.jpg';
+import { getSubscription } from '../services/services';
+import calculateNextDeliveries from '../utils/calculateNextDeliveries';
 
 function PlanView() {
   const { user } = useContext(UserContext);
+  const [subscriptionData, setSubscriptionData] = useState({
+    name: '',
+    timestamp: '',
+    day: null,
+    options: [],
+  });
+  const [nextDeliveries, setNextDeliviries] = useState([]);
+
+  useEffect(() => {
+    getSubscription('f09907b9-2810-4e78-9984-239bf96be829').then((response) => {
+      setSubscriptionData(response.data);
+      setNextDeliviries(calculateNextDeliveries(response.data));
+    });
+  }, []);
+
   return (
     <PageContainer>
       <ContentContainer>
@@ -23,28 +41,28 @@ function PlanView() {
           <PlanDetails>
             <DeliveryInfo>
               <p>
-                Plano: <span> mensal </span>
+                Plano: <span> {subscriptionData.name} </span>
               </p>
               <p>
-                Data da Assinatura: <span> mensal </span>
+                Data da Assinatura:{' '}
+                <span>
+                  {' '}
+                  {dayjs(subscriptionData.timestamp).format('DD/MM/YYYY')}{' '}
+                </span>
               </p>
               <ul>
                 Proximas entregas
-                <li>
-                  <span>dd/mm/aaaa</span>
-                </li>
-                <li>
-                  <span>dd/mm/aaaa</span>
-                </li>
-                <li>
-                  <span>dd/mm/aaaa</span>
-                </li>
+                {nextDeliveries.map((delivery) => (
+                  <li key={delivery}>
+                    <span>{delivery}</span>
+                  </li>
+                ))}
               </ul>
             </DeliveryInfo>
             <OptionsList>
-              <li>Chas</li>
-              <li>Produtos Organicos</li>
-              <li>Incensos</li>
+              {subscriptionData.options.map((option) => (
+                <li>{option.name}</li>
+              ))}
             </OptionsList>
           </PlanDetails>
         </PlanContainer>
@@ -64,7 +82,7 @@ const PlanContainer = styled.div`
   margin-bottom: 15px;
   font-size: 20px;
   font-weight: 700;
-  padding: 15px 25px 25px;
+  padding: 15px 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,7 +94,10 @@ const Image = styled.img`
 
 const PlanDetails = styled.div`
   width: 100%;
-  height: 200px;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const DeliveryInfo = styled.div`
@@ -109,4 +130,8 @@ const OptionsList = styled.ul`
   color: #e63c80;
   font-weight: 400;
   font-size: 18px;
+
+  li {
+    margin: 5px;
+  }
 `;

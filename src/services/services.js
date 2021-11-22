@@ -24,7 +24,18 @@ function postSubscription(body, token) {
   return axiosBase.post('/subscription', body, createBearerAuth(token));
 }
 
+function getSubscription(token) {
+  return axiosBase.get('/subscription', createBearerAuth(token));
+}
+
 function getFormDetails(token) {
   return axiosBase.get('/form-details', createBearerAuth(token));
 }
-export { postNewUser, postUser, getPlans, getFormDetails, postSubscription };
+export {
+  postNewUser,
+  postUser,
+  getPlans,
+  getFormDetails,
+  postSubscription,
+  getSubscription,
+};

@@ -18,6 +18,8 @@ function Plans() {
       .catch((response) => console.log(response));
   }, []);
 
+  console.log(user.token);
+
   return (
     <PageContainer>
       <ContentContainer>
