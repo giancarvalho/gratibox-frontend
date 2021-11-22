@@ -9,7 +9,7 @@ function CheckableItem({ item, chosenItems, setchosenItems, isCheckable }) {
 
   useEffect(() => {
     if (isCheckable.exclusiveOption) {
-      if (chosenItems.day !== item.name) {
+      if (chosenItems.day !== item.value) {
         setIsChecked(false);
       }
     }
@@ -33,7 +33,7 @@ function CheckableItem({ item, chosenItems, setchosenItems, isCheckable }) {
     e.stopPropagation();
 
     if (isCheckable.exclusiveOption) {
-      setchosenItems({ ...chosenItems, day: item.name });
+      setchosenItems({ ...chosenItems, day: item.value });
     } else {
       addOrDeleteOption();
     }

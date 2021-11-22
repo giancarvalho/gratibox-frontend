@@ -14,7 +14,7 @@ import img from '../../assets/images/image03.jpg';
 import DropDown from './DropDown';
 import Button from '../../components/buttons/Button';
 import Input from '../../components/others/Input';
-import { getFormDetails } from '../../services/services';
+import { getFormDetails, postPlan } from '../../services/services';
 
 function State({ statesList, setAddressData, addressData }) {
   const [isClicked, setIsClicked] = useState(false);
@@ -72,8 +72,16 @@ function PlanView() {
   const [plan, setPlan] = useState([]);
   const days =
     id === '1'
-      ? [{ name: '01' }, { name: '10' }, { name: '20' }]
-      : [{ name: 'Seg' }, { name: 'Ter' }, { name: 'Qua' }];
+      ? [
+          { name: '01', value: 1 },
+          { name: '10', value: 10 },
+          { name: '20', value: 20 },
+        ]
+      : [
+          { name: 'Seg', value: 0 },
+          { name: 'Qua', value: 3 },
+          { name: 'Sex', value: 4 },
+        ];
 
   useEffect(() => {
     getFormDetails(user.token)
@@ -86,6 +94,18 @@ function PlanView() {
       .catch((error) => console.log(error.response?.data));
   }, []);
 
+  function subscribeToPlan() {
+    const body = {
+      userId: 1,
+      planDetails: { planId: Number(id), day: chosenItems.day },
+      addressData,
+      options: chosenItems.options,
+    };
+
+    console.log(body);
+    postPlan(body, user.token).catch((error) => console.log(error.response));
+  }
+
   return (
     <PageContainer>
       <ContentContainer>
@@ -97,47 +117,56 @@ function PlanView() {
         <PlanContainer>
           <Image src={img} alt="plan-img" />
           {showDelivery ? (
-            <>
-              <AddressInput
-                placeholder="Nome Completo"
-                value={addressData.recipient}
-                onChange={(e) =>
-                  setAddressData({ ...addressData, recipient: e.target.value })
-                }
-              />
-              <AddressInput
-                placeholder="Endereço de Entrega"
-                value={addressData.address}
-                onChange={(e) =>
-                  setAddressData({ ...addressData, address: e.target.value })
-                }
-              />
-              <AddressInput
-                placeholder="CEP"
-                value={addressData.zipcode}
-                onChange={(e) =>
-                  setAddressData({ ...addressData, zipcode: e.target.value })
-                }
-              />
-              <AuxContainer>
+            <form>
+              <fieldset>
                 <AddressInput
-                  className="city"
-                  placeholder="Cidade"
-                  value={addressData.city}
+                  placeholder="Nome Completo"
+                  value={addressData.recipient}
                   onChange={(e) =>
                     setAddressData({
                       ...addressData,
-                      city: e.target.value,
+                      recipient: e.target.value,
                     })
                   }
+                  required
                 />
-                <State
-                  statesList={formDetails.states}
-                  setAddressData={setAddressData}
-                  addressData={addressData}
+                <AddressInput
+                  placeholder="Endereço de Entrega"
+                  value={addressData.address}
+                  onChange={(e) =>
+                    setAddressData({ ...addressData, address: e.target.value })
+                  }
+                  required
                 />
-              </AuxContainer>
-            </>
+                <AddressInput
+                  placeholder="CEP"
+                  value={addressData.zipcode}
+                  onChange={(e) =>
+                    setAddressData({ ...addressData, zipcode: e.target.value })
+                  }
+                  required
+                />
+                <AuxContainer>
+                  <AddressInput
+                    className="city"
+                    placeholder="Cidade"
+                    value={addressData.city}
+                    onChange={(e) =>
+                      setAddressData({
+                        ...addressData,
+                        city: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <State
+                    statesList={formDetails.states}
+                    setAddressData={setAddressData}
+                    addressData={addressData}
+                  />
+                </AuxContainer>
+              </fieldset>
+            </form>
           ) : (
             <>
               <DropDown name="Plano" items={plan} />
@@ -160,7 +189,7 @@ function PlanView() {
         </PlanContainer>
 
         {showDelivery ? (
-          <StyledButton onClick={() => setShowDelivery(true)}>
+          <StyledButton onClick={() => subscribeToPlan()}>
             Finalizar
           </StyledButton>
         ) : (
