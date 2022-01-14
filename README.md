@@ -5,7 +5,7 @@ Gratibox is a fictional website that helps you stay grateful. Customers can choo
 
 You are in the frontend repository, you can see the [backend here](https://github.com/giancarvalho/gratibox-backend)
 
-### See the project live [here](https://gratibox-frontend-six.vercel.app).
+### See the project live (mobile only) [here](https://gratibox-frontend-six.vercel.app).
 
 ## Main technologies - frontend
 
